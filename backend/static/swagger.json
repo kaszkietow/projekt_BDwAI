@@ -1,0 +1,442 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Car API",
+    "version": "1.0.0",
+    "description": "API do zarządzania samochodami i użytkownikami dane testowych użytkowników: username: piotrullo2,piotrullo3,piotrullo4, hasło dla wszystkich takie same: kwa123  "
+  },
+  "servers": [
+    {
+      "url": "http://localhost:5000",
+      "description": "Lokalny serwer"
+    }
+  ],
+  "paths": {
+    "/api/cars": {
+      "get": {
+        "summary": "Pobierz wszystkie samochody",
+        "operationId": "getCars",
+        "tags": ["Cars"],
+        "security": [
+          {
+            "jwt": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista samochodów",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Car"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Błąd serwera"
+          }
+        }
+      },
+      "post": {
+        "summary": "Dodaj nowy samochód",
+        "operationId": "createCar",
+        "tags": ["Cars"],
+        "security": [
+          {
+            "jwt": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Car"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Samochód został dodany",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Car"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Brak wymaganych danych"
+          },
+          "500": {
+            "description": "Samochód istnieje."
+          }
+        }
+      }
+    },
+    "/api/cars/{id}": {
+      "delete": {
+        "summary": "Usuń samochód",
+        "operationId": "deleteCar",
+        "tags": ["Cars"],
+        "security": [
+          {
+            "jwt": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID samochodu",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Samochód usunięty"
+          },
+          "404": {
+            "description": "Samochód nie znaleziony"
+          }
+        }
+      },
+      "patch": {
+        "summary": "Zaktualizuj samochód",
+        "operationId": "updateCar",
+        "tags": ["Cars"],
+        "security": [
+          {
+            "jwt": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID samochodu",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Car"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Samochód zaktualizowany",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Car"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Samochód nie znaleziony"
+          },
+          "400": {
+            "description": "Błąd walidacji"
+          }
+        }
+      }
+    },
+    "/api/users": {
+      "get": {
+        "summary": "Pobierz wszystkich użytkowników",
+        "operationId": "getUsers",
+        "tags": ["Users"],
+        "security": [
+          {
+            "jwt": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista użytkowników",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/User"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/register": {
+      "post": {
+        "summary": "Rejestracja użytkownika",
+        "operationId": "registerUser",
+        "tags": ["Users"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/User"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Użytkownik zarejestrowany"
+          },
+          "400": {
+            "description": "Brak wymaganych danych"
+          }
+        }
+      }
+    },
+    "/api/users/{id}": {
+      "delete": {
+        "summary": "Usuń użytkownika",
+        "operationId": "deleteUser",
+        "tags": ["Users"],
+        "security": [
+          {
+            "jwt": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID użytkownika",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Użytkownik usunięty"
+          },
+          "404": {
+            "description": "Użytkownik nie znaleziony"
+          }
+        }
+      },
+      "patch": {
+        "summary": "Zaktualizuj użytkownika",
+        "operationId": "updateUser",
+        "tags": ["Users"],
+        "security": [
+          {
+            "jwt": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID użytkownika",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/User"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Użytkownik zaktualizowany"
+          },
+          "404": {
+            "description": "Użytkownik nie znaleziony"
+          },
+          "400": {
+            "description": "Błąd walidacji"
+          }
+        }
+      }
+    },
+    "/login": {
+      "post": {
+        "summary": "Logowanie użytkownika",
+        "operationId": "loginUser",
+        "tags": ["Users"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Zalogowany użytkownik",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "access_token": {
+                      "type": "string",
+                      "description": "Token dostępu"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Błędne dane logowania"
+          }
+        }
+      }
+    },
+    "/logout": {
+      "post": {
+        "summary": "Wylogowanie użytkownika",
+        "operationId": "logoutUser",
+        "tags": ["Users"],
+        "security": [
+          {
+            "jwt": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Użytkownik wylogowany pomyślnie",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "Komunikat potwierdzający wylogowanie"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Brak autoryzacji (token wygasł lub jest nieprawidłowy)"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "jwt": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "Authorization",
+        "description": "Podaj token JWT w nagłówku w formacie: Bearer {token}"
+      }
+    },
+    "schemas": {
+      "Car": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "ID samochodu"
+          },
+          "model": {
+            "type": "string",
+            "description": "Model samochodu"
+          },
+          "description": {
+            "type": "string",
+            "description": "Opis samochodu"
+          },
+          "available": {
+            "type": "boolean",
+            "description": "Dostępność samochodu"
+          },
+          "img_url": {
+            "type": "string",
+            "description": "URL obrazka samochodu"
+          },
+          "owner_id": {
+            "type": "integer",
+            "description": "ID właściciela"
+          }
+        },
+        "required": ["model", "description", "available", "img_url"]
+      },
+      "User": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "ID użytkownika"
+          },
+          "username": {
+            "type": "string",
+            "description": "Nazwa użytkownika"
+          },
+          "password": {
+            "type": "string",
+            "description": "Hasło użytkownika"
+          },
+          "gender": {
+            "type": "string",
+            "description": "Płeć użytkownika"
+          },
+          "img_url": {
+            "type": "string",
+            "description": "URL obrazka użytkownika"
+          }
+        },
+        "required": ["username", "password", "gender"]
+      },
+      "LoginRequest": {
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string",
+            "description": "Nazwa użytkownika"
+          },
+          "password": {
+            "type": "string",
+            "description": "Hasło"
+          }
+        },
+        "required": ["username", "password"]
+      }
+    }
+  }
+}
