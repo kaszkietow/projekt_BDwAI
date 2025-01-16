@@ -1,6 +1,6 @@
 # ShareYourCar 🚀
 
-### Jak uruchomić aplikację w Pycharm
+### Jak uruchomić aplikację w Pycharm?
 
 1. Sklonuj repozytorium z github:
 
