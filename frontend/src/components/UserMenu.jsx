@@ -41,8 +41,8 @@ const UserMenu = ({ currentUser }) => {
         />
       </MenuTrigger>
       <MenuContent position={"absolute"} top={"70px"} right={"-10px"}>
-        <MenuItem value="rename">Rename</MenuItem>
-        <MenuItem value="export">Export</MenuItem>
+        <MenuItem value="rename">My profile</MenuItem>
+        <MenuItem value="export">Reservations</MenuItem>
         <MenuItem
           value="logout"
           color="fg.error"
