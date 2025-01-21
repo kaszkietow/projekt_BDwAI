@@ -16,18 +16,19 @@ import {BASE_URL} from "./CarsGrid.jsx";
 import {toaster} from "./ui/toaster.jsx";
 
 
-const CarCard = ({ car, setCars }) => {
+const CarCard = ({ car, users, setCars }) => {
   const token = localStorage.getItem("token");
-  let currentUserId;
+  let currentUser;
   try {
     if (token) {
       const decodedToken = jwtDecode(token);
-      currentUserId = decodedToken.sub.id;
+      currentUser = decodedToken.sub.username;
     }
   } catch (error) {
     console.error("Error decoding token:", error);
   }
-  const isOwner = car.owner.id === currentUserId;
+  const isOwner = car.owner.username === currentUser;
+  const isAdmin = currentUser === 'admin';
 
 
   const handleDeleteCar = async () => {
@@ -60,8 +61,13 @@ const CarCard = ({ car, setCars }) => {
       }
   }
 
+  const cardDisabled = (!isOwner && !isAdmin) && car.available === "false";
   return (
-      <Card.Root shadow="2px -2px var(--shadow-color)" shadowColor="teal" bg={useColorModeValue("teal.500", "gray.950")}>
+      <Card.Root
+          shadow="2px -2px var(--shadow-color)"
+          shadowColor="teal" bg={useColorModeValue("teal.500", "gray.950")}
+          opacity={cardDisabled ? 0.5 : 1}
+          pointerEvents={cardDisabled ? "none" : "auto"} >
         <Image
           src={car.imgUrl}
           alt={car.description}
@@ -80,12 +86,19 @@ const CarCard = ({ car, setCars }) => {
             </Flex>
           </Flex>
         </Card.Header>
-        <Card.Body minH={"100px"}>
+        <Card.Body minH={"100px"} display={"flex"} justifyContent={"space-between"}>
           <Text>{car.description}</Text>
+            <Flex>
+                <Flex>
+                <Text textStyle={{base:"lg", sm:"2xl"}} fontWeight={{ base: "medium", lg: "bold" }} letterSpacing="tight" mt="2">
+                    PLN {car.price} /day
+                </Text>
+                </Flex>
+            </Flex>
         </Card.Body>
         <Card.Footer gap="2">
           <Button variant="solid">Book now</Button>
-          {isOwner && (
+          {(isOwner || isAdmin) && (
            <>
             <EditCar car={car} setCars={setCars}/>
             <Button variant="outline" colorScheme="red" onClick={handleDeleteCar}>

@@ -22,8 +22,9 @@ class Car(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     model = db.Column(db.String(80), nullable=False)
     description = db.Column(db.String(200), nullable=False)
-    available = db.Column(db.String(10), default=True)
+    available = db.Column(db.String(10), nullable=False)
     img_url = db.Column(db.String(200), nullable=False)
+    price = db.Column(db.Integer, nullable=False)
     owner_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
 
@@ -35,6 +36,7 @@ class Car(db.Model):
             "description": self.description,
             "available": self.available,
             "imgUrl": self.img_url,
+            "price": self.price,
             "owner": {
                 "id": self.owner_id,
                 "username": self.owner.username,

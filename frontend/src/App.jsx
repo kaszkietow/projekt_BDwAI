@@ -8,8 +8,6 @@ import LoginPage from "./components/LoginPage.jsx";
 import RegisterPage from "./components/RegisterPage.jsx";
 import HomePage from "./components/HomePage.jsx";
 import CarsGrid from "./components/CarsGrid.jsx";
-import PrivateRoute from "./components/PrivateRoute.jsx";
-import PublicRoute from "./components/PublicRoute.jsx";
 
 
 function App() {
@@ -21,33 +19,32 @@ function App() {
                         <Route
                             path="/"
                             element={
-                                <PublicRoute>
+
                                     <HomePage />
-                                </PublicRoute>
+
                             }
                         />
                         <Route
                             path="/login"
                             element={
-                                <PublicRoute>
+
                                     <LoginPage />
-                                </PublicRoute>
+
                             }
                         />
                         <Route
                             path="/register"
                             element={
-                                <PublicRoute>
+
                                     <RegisterPage />
-                                </PublicRoute>
+
                             }
                         />
                         <Route
                             path="/cars"
                             element={
-                                <PrivateRoute>
+
                                     <CarsGrid />
-                                </PrivateRoute>
                             }
                         />
                     </Routes>

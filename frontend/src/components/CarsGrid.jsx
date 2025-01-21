@@ -55,7 +55,7 @@ console.log(cars);
                         // Find the user associated with the car
                         const user = users.find(user => user.id === car.owner_id);
                         return (
-                            <CarCard key={car.id} car={car} setCars={setCars} />
+                            <CarCard key={car.id} car={car} setCars={setCars} users={users} />
                         );
                     })}
                     </Grid>

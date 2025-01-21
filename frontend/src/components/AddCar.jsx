@@ -6,8 +6,8 @@ import {
   Textarea,
 } from "@chakra-ui/react";
 import { Button } from "./ui/button";
+import {RadioCardItem, RadioCardLabel, RadioCardRoot} from "./ui/radio-card.jsx"
 import {
-  DialogActionTrigger,
   DialogBody,
   DialogContent,
   DialogFooter,
@@ -18,15 +18,15 @@ import {
 } from "./ui/dialog";
 import { Field } from "./ui/field";
 import { IoAddCircleSharp } from "react-icons/io5";
-import { Radio, RadioGroup } from "./ui/radio.jsx";
 import { toaster } from "./ui/toaster.jsx";
 import {jwtDecode} from "jwt-decode";
 import {BASE_URL} from "./CarsGrid.jsx";
-
+import {NumberInputField, NumberInputRoot} from "./ui/number-input.jsx";
 
 const AddCar = ( { setCars }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false); // Fixed initial state
+  const [price, setPrice] = useState("100")
   const [inputs, setInputs] = useState({
     model: "",
     description: "",
@@ -64,7 +64,7 @@ const AddCar = ( { setCars }) => {
   }
 
   // Łączenie inputs i owner_id w jeden obiekt
-  const carData = { ...inputs, owner_id };
+  const carData = { ...inputs, owner_id, price };
 
   // Dodanie logowania do konsoli, aby sprawdzić, co wysyłasz
   console.log('Sending car data to server:', carData);
@@ -142,31 +142,34 @@ const AddCar = ( { setCars }) => {
                     }
                 />
               </Field>
-              <Field label="Available">
-                <RadioGroup>
-                  <HStack gap={6}>
-                    <Radio
-                        value='true'
-                        variant="outline"
-                        colorPalette="teal"
-                        onChange={(e) =>
+                <Stack>
+              <RadioCardRoot >
+                <RadioCardLabel>Avability</RadioCardLabel>
+                        <HStack align="stretch">
+                        <RadioCardItem
+                          label={"Not Available"}
+                          value={'false'}
+                          onChange={(e) =>
                             setInputs({...inputs, available: e.target.value})
-                        }
-                    >
-                      YES
-                    </Radio>
-                    <Radio
-                        value='false'
-                        variant="outline"
-                        colorPalette="teal"
-                        onChange={(e) =>
+                          }>
+                        </RadioCardItem>
+
+                        <RadioCardItem
+                          label={"Available"}
+                          value={'true'}
+                          onChange={(e) =>
                             setInputs({...inputs, available: e.target.value})
-                        }
-                    >
-                      NO
-                    </Radio>
-                  </HStack>
-                </RadioGroup>
+                          }>
+                        </RadioCardItem>
+                </HStack>
+              </RadioCardRoot>
+              </Stack>
+              <Field label="Price" >
+                <NumberInputRoot
+                    value={price}
+                    onValueChange={(e) => setPrice(e.value)}>
+                  <NumberInputField/>
+                </NumberInputRoot>
               </Field>
               <Field label="Image URL" >
                 <Textarea

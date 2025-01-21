@@ -3,7 +3,7 @@
   "info": {
     "title": "Car API",
     "version": "1.0.0",
-    "description": "API do zarządzania samochodami i użytkownikami dane testowych użytkowników: username: piotrullo2,piotrullo3,piotrullo4, hasło dla wszystkich takie same: kwa123  "
+    "description": "API do zarządzania samochodami i użytkownikami dane dla konta admin: admin hasło: kwa123"
   },
   "servers": [
     {
@@ -61,7 +61,7 @@
           }
         },
         "responses": {
-          "201": {
+          "200": {
             "description": "Samochód został dodany",
             "content": {
               "application/json": {
@@ -187,31 +187,6 @@
         }
       }
     },
-    "/api/register": {
-      "post": {
-        "summary": "Rejestracja użytkownika",
-        "operationId": "registerUser",
-        "tags": ["Users"],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/User"
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "Użytkownik zarejestrowany"
-          },
-          "400": {
-            "description": "Brak wymaganych danych"
-          }
-        }
-      }
-    },
     "/api/users/{id}": {
       "delete": {
         "summary": "Usuń użytkownika",
@@ -274,7 +249,14 @@
         },
         "responses": {
           "200": {
-            "description": "Użytkownik zaktualizowany"
+            "description": "Użytkownik zaktualizowany",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
           },
           "404": {
             "description": "Użytkownik nie znaleziony"
@@ -289,7 +271,7 @@
       "post": {
         "summary": "Logowanie użytkownika",
         "operationId": "loginUser",
-        "tags": ["Users"],
+        "tags": ["Authorization"],
         "requestBody": {
           "required": true,
           "content": {
@@ -323,11 +305,36 @@
         }
       }
     },
+    "/register": {
+      "post": {
+        "summary": "Rejestracja użytkownika",
+        "operationId": "registerUser",
+        "tags": ["Authorization"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/User"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Użytkownik zarejestrowany"
+          },
+          "400": {
+            "description": "Brak wymaganych danych"
+          }
+        }
+      }
+    },
     "/logout": {
       "post": {
         "summary": "Wylogowanie użytkownika",
         "operationId": "logoutUser",
-        "tags": ["Users"],
+        "tags": ["Authorization"],
         "security": [
           {
             "jwt": []
@@ -352,6 +359,33 @@
           },
           "401": {
             "description": "Brak autoryzacji (token wygasł lub jest nieprawidłowy)"
+          }
+        }
+      }
+    },
+    "/current_user": {
+      "get": {
+        "summary": "Pobierz dane bieżącego użytkownika",
+        "operationId": "getCurrentUser",
+        "tags": ["Users"],
+        "security": [
+          {
+            "jwt": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Dane bieżącego użytkownika",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Błąd serwera"
           }
         }
       }
@@ -390,12 +424,16 @@
             "type": "string",
             "description": "URL obrazka samochodu"
           },
+          "price": {
+            "type": "number",
+            "description": "Cena samochodu"
+          },
           "owner_id": {
             "type": "integer",
             "description": "ID właściciela"
           }
         },
-        "required": ["model", "description", "available", "img_url"]
+        "required": ["model", "description", "available", "img_url", "price"]
       },
       "User": {
         "type": "object",

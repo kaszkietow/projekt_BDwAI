@@ -16,14 +16,16 @@ import {
   DialogTrigger,
 } from "./ui/dialog";
 import { Field } from "./ui/field";
-import { Radio, RadioGroup } from "./ui/radio.jsx";
 import { FaRegEdit } from "react-icons/fa";
 import {BASE_URL} from "./CarsGrid.jsx";
 import {toaster} from "./ui/toaster.jsx";
+import {RadioCardItem, RadioCardLabel, RadioCardRoot} from "./ui/radio-card.jsx";
+import {NumberInputField, NumberInputRoot} from "./ui/number-input.jsx";
 
 const EditCar = ({setCars, car}) => {
   const[isOpen, setIsOpen] = useState(false);
   const[isLoading, setIsLoading] = useState(false);
+  const [price, setPrice] = useState("100")
   const[inputs, setInputs] = useState({
         model: car.model,
         description: car.description,
@@ -33,6 +35,7 @@ const EditCar = ({setCars, car}) => {
   const handleEditCar =  async (e) => {
     e.preventDefault();
     setIsLoading(true);
+    const carData = { ...inputs, price};
     const token = localStorage.getItem("token");
     try {
       const res = await fetch(BASE_URL + "/api/cars/" + car.id, {
@@ -41,7 +44,7 @@ const EditCar = ({setCars, car}) => {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(inputs)
+        body: JSON.stringify(carData),
       })
       const data = await res.json();
       if (!res.ok) {
@@ -93,19 +96,32 @@ const EditCar = ({setCars, car}) => {
                       onChange={(e) => setInputs((prev) => ({...prev, description: e.target.value}))}
                   />
                 </Field>
-                <Field label="Available">
-                  <RadioGroup>
-                    <HStack gap={6}>
-                      <Radio value='true' variant="outline" colorPalette="teal"
-                             onChange={(e) => setInputs((prev) => ({...prev, available: e.target.value}))}>
-                        TAK
-                      </Radio>
-                      <Radio value='false' variant="outline" colorPalette="teal"
-                             onChange={(e) => setInputs((prev) => ({...prev, available: e.target.value}))}>
-                        NIE
-                      </Radio>
-                    </HStack>
-                  </RadioGroup>
+                <Stack>
+                <RadioCardRoot defaultValue="next">
+                  <RadioCardLabel>Avability</RadioCardLabel>
+                          <HStack align="stretch">
+                          <RadioCardItem
+                            label={"Not Available"}
+                            value={'false'}
+                                onChange={(e) => setInputs((prev) => ({...prev, available: e.target.value}))}>
+                          </RadioCardItem>
+
+                          <RadioCardItem
+                              label={"Available"}
+                            value={'true'}
+                            onChange={(e) => setInputs((prev) => ({...prev, available: e.target.value}))}>
+                          </RadioCardItem>
+                  </HStack>
+                </RadioCardRoot>
+                </Stack>
+                <Field label="Price" >
+                  <NumberInputRoot
+                      min={10} max={1000}
+                      value={price}
+                      onValueChange={(e) => setPrice(e.value)}
+                  >
+                    <NumberInputField/>
+                  </NumberInputRoot>
                 </Field>
                 <Field label="Image">
                   <Textarea

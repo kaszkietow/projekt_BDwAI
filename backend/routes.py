@@ -29,7 +29,7 @@ def create_car():
     try:
         data = request.json
         print(f"Received data: {data}")  # Logowanie danych wejściowych
-        required_fields = ["model", "description", "available", "img_url"]
+        required_fields = ["model", "description", "available", "img_url", "price"]
         for field in required_fields:
             if field not in data or not data.get(field):
                 return jsonify({"error": f"Missing required field: {field}"}), 400
@@ -39,11 +39,12 @@ def create_car():
         description = data.get("description")
         available = data.get("available")
         img_url = data.get("img_url")
+        price = data.get("price")
         owner_id = data.get("owner_id")
 
         new_car = Car(
             id=id, model=model, description=description,
-            available=available, img_url=img_url, owner_id=owner_id
+            available=available, img_url=img_url, price=price, owner_id=owner_id
         )
         db.session.add(new_car)
         db.session.commit()
@@ -84,6 +85,7 @@ def update_car(id):
         car.description = data.get("description", car.description)
         car.available = data.get("available", car.available)
         car.img_url = data.get("img_url", car.img_url)
+        car.price = data.get("price", car.price)
 
         db.session.commit()
         return jsonify(car.to_json_car_with_owner()), 200
@@ -105,6 +107,7 @@ def register_user():
     try:
         data = request.get_json()
 
+        # Walidacja wymaganych pól
         required_fields = ["username", "password", "gender"]
         for field in required_fields:
             if field not in data:
@@ -114,21 +117,38 @@ def register_user():
         password = data.get("password")
         gender = data.get("gender")
 
+        # Walidacja długości nazwy użytkownika
+        if not username or len(username.strip()) < 3:
+            return jsonify({"error": "Username must be at least 3 characters long"}), 400
+
+        # Walidacja hasła
+        if not password or len(password) < 6:
+            return jsonify({"error": "Password must be at least 6 characters long"}), 400
+
+        # Walidacja płci
+        if gender not in ["male", "female"]:
+            return jsonify({"error": "Gender must be either 'male' or 'female'"}), 400
+
+        # Sprawdzenie, czy użytkownik już istnieje
         if User.query.filter_by(username=username).first():
             return jsonify({"error": "Username already exists"}), 400
 
+        # Generowanie URL avatara na podstawie płci
         if gender == "male":
             img_url = f"https://avatar.iran.liara.run/public/boy?username={username}"
         else:
             img_url = f"https://avatar.iran.liara.run/public/girl?username={username}"
 
+        # Tworzenie nowego użytkownika
         new_user = User(username=username, password=password, gender=gender, img_url=img_url)
         db.session.add(new_user)
         db.session.commit()
         return jsonify({"message": "User registered successfully"}), 201
+
     except Exception as e:
         db.session.rollback()
         return jsonify({"error": str(e)}), 500
+
 
 
 @app.route("/api/users/<int:id>", methods=["DELETE"])

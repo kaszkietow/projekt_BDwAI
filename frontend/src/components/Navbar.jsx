@@ -12,7 +12,7 @@ const Navbar = () => {
                 justifyContent="center"
                 alignItems="center"
                 bg={"gray.700"}
-                height={"12vh"}
+                height={"13vh"}
                 w="100%"
                 borderRadius={5}
                 >
