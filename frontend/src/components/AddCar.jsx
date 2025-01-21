@@ -30,7 +30,7 @@ const AddCar = ( { setCars }) => {
   const [inputs, setInputs] = useState({
     model: "",
     description: "",
-    available: "", // Empty initially
+    available: "",
     img_url: "",
   });
 

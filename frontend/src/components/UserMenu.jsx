@@ -1,4 +1,4 @@
-import { Box, MenuContent, MenuItem, MenuRoot, MenuTrigger } from "@chakra-ui/react";
+import { Button, MenuContent, MenuItem, MenuRoot, MenuTrigger} from "@chakra-ui/react";
 import { Avatar } from "./ui/avatar.jsx";
 import { useNavigate } from "react-router-dom"; // Użycie hooka do nawigacji
 import * as React from "react";
@@ -41,8 +41,13 @@ const UserMenu = ({ currentUser }) => {
         />
       </MenuTrigger>
       <MenuContent position={"absolute"} top={"70px"} right={"-10px"}>
-        <MenuItem value="rename">My profile</MenuItem>
-        <MenuItem value="export">Reservations</MenuItem>
+
+
+        <MenuItem onClick={() => navigate("/myprofile", { state: { currentUser } })} value="myprofile" >My profile</MenuItem>
+        <MenuItem onClick={() => navigate("/reservations", { state: { currentUser } })} value={"reservations"}>Reservations</MenuItem>
+        {currentUser.username === "admin" && (
+          <MenuItem onClick={() => navigate("/userslist")} value={"users"}>Users</MenuItem>
+        )}
         <MenuItem
           value="logout"
           color="fg.error"

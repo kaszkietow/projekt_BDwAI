@@ -14,9 +14,12 @@ import {useColorModeValue} from "./ui/color-mode.jsx";
 import {jwtDecode} from "jwt-decode";
 import {BASE_URL} from "./CarsGrid.jsx";
 import {toaster} from "./ui/toaster.jsx";
+import * as PropTypes from "prop-types";
+import MakeReservation from "./MakeReservation.jsx";
 
 
-const CarCard = ({ car, users, setCars }) => {
+
+const CarCard = ({ car, user, setCars }) => {
   const token = localStorage.getItem("token");
   let currentUser;
   try {
@@ -97,8 +100,8 @@ const CarCard = ({ car, users, setCars }) => {
             </Flex>
         </Card.Body>
         <Card.Footer gap="2">
-          <Button variant="solid">Book now</Button>
-          {(isOwner || isAdmin) && (
+          <MakeReservation car={car} currentUser={currentUser} user={user}></MakeReservation>
+          {(isOwner || isAdmin) &&  (
            <>
             <EditCar car={car} setCars={setCars}/>
             <Button variant="outline" colorScheme="red" onClick={handleDeleteCar}>

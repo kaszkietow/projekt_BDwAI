@@ -19,16 +19,19 @@ import { Avatar } from "./ui/avatar.jsx";
 import UserMenu from "./UserMenu.jsx";
 import {useEffect, useState} from "react";
 import {BASE_URL} from "./CarsGrid.jsx";
+import {useNavigate} from "react-router-dom";
 
 const CarIcon = chakra(IoCarSportSharp);
 
 const NavBar1 = ({setCars}) => {
+  const navigate = useNavigate()
   const { colorMode, toggleColorMode } = useColorMode();
   const [currentUser, setCurrentUser] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
+
     const handleCurrUser = async () => {
       const token = localStorage.getItem("token"); // Pobierz token z localStorage
       if (!token) {
@@ -63,7 +66,7 @@ const NavBar1 = ({setCars}) => {
 
     handleCurrUser();
   }, []);
-  console.log(currentUser)
+  const isLocalhostCars = window.location.href.includes("http://localhost:3000/cars");
     return (
         <Flex
             alignItems="center"
@@ -74,11 +77,11 @@ const NavBar1 = ({setCars}) => {
             px={4}
         >
             {/* Logo */}
-            <Flex>
-                <Heading size="4xl" display={{ base: "none", md: "flex" }}>
+            <Flex >
+                <Heading size="4xl" display={{ base: "none", md: "flex" }} onClick={() => navigate("/cars")}>
                     🚗🛻🚛
                 </Heading>
-                <CarIcon display={{ base: "flex", md: "none" }} boxSize="8" />
+                <CarIcon display={{ base: "flex", md: "none" }} boxSize="8" onClick={() => navigate("/cars")}/>
             </Flex>
 
             {/* Actions */}
@@ -92,7 +95,7 @@ const NavBar1 = ({setCars}) => {
                     {colorMode === "light" ? <IoMoon /> : <IoSunny size={20} />}
                 </Button>
                 <Toaster />
-                <AddCar setCars={setCars}/>
+                {isLocalhostCars && <AddCar setCars={setCars}/>}
                 <UserMenu currentUser={currentUser}/>
             </Flex>
         </Flex>

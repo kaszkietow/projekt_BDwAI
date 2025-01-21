@@ -1,8 +1,16 @@
+import datetime
 from app import app, db
 from flask import request, jsonify, Flask, redirect, send_from_directory
-from models import Car, User
+from models import Car, User, Reservation
 from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity, get_jwt
 from flask_swagger_ui import get_swaggerui_blueprint
+from datetime import datetime
+import threading
+from zoneinfo import ZoneInfo
+from threading import Timer
+from sqlalchemy import text
+from sqlalchemy.exc import IntegrityError
+
 
 app.config['JWT_SECRET_KEY'] = 'A6BF4B5839CA8C4F7872DE2F854BE'
 app.config["JWT_ACCESS_TOKEN_EXPIRES"] = 3600
@@ -236,13 +244,108 @@ def get_current_user():
         # Pobierz cały obiekt `sub` z tokena
         user_identity = get_jwt_identity()
         user_id = user_identity["id"]
+
+        # Dynamicznie pobierz użytkownika i powiązane dane z bazy
         user = User.query.get(user_id)
+
+        if not user:
+            return jsonify({"error": "User not found"}), 404
+
+        # Serializacja użytkownika z samochodami
         user_json = user.to_json_user()
-        # Zwrot danych użytkownika (dostosuj według potrzeb)
         return jsonify(user_json), 200
     except Exception as e:
         print(f"Error fetching currentUser: {e}")
         return jsonify({"error": "Internal Server Error"}), 500
+
+
+
+
+@app.route("/reservation", methods=["POST"])
+@jwt_required()
+def make_reservation():
+    try:
+        data = request.get_json()
+        print("Request data:", data)  # Logowanie danych wejściowych
+
+        car_id = data.get("car_id")
+        user_id = get_jwt_identity()["id"]
+        reservation_date = datetime.fromisoformat(data.get("reservation_date")).replace(tzinfo=ZoneInfo("Europe/Warsaw"))
+        return_date = datetime.fromisoformat(data.get("return_date")).replace(tzinfo=ZoneInfo("Europe/Warsaw"))
+
+        print(f"Car ID: {car_id}, User ID: {user_id}, Reservation Date: {reservation_date}, Return Date: {return_date}")
+
+        car = Car.query.get(car_id)
+        if not car or not car.available:
+            return jsonify({"error": "Car not available"}), 400
+
+        # Tworzenie rezerwacji
+        reservation = Reservation(
+            car_id=car_id,
+            user_id=user_id,
+            reservation_date=reservation_date,
+            return_date=return_date,
+        )
+        db.session.add(reservation)
+        car.available = "false"
+        db.session.commit()  # Zatwierdzamy transakcję
+
+        # Oblicz opóźnienie i zaplanuj ponowną dostępność
+        delay = (return_date - datetime.now(ZoneInfo("Europe/Warsaw"))).total_seconds()
+        print(f"Scheduling availability update for car ID {car_id} in {delay} seconds.")
+        set_car_available_later(car_id, delay)
+
+        return jsonify({"message": "Reservation created successfully", "reservation": reservation.to_json_reservation()}), 201
+    except IntegrityError as e:
+        db.session.rollback()  # W razie błędu rollback
+        print("IntegrityError in make_reservation:", str(e))  # Logowanie błędu
+        return jsonify({"error": "Car is already reserved for this time slot"}), 400
+    except Exception as e:
+        print("Error in make_reservation:", str(e))  # Logowanie błędu
+        return jsonify({"error": "Internal Server Error"}), 500
+
+
+def set_car_available_later(car_id, delay):
+    def update_availability():
+        with app.app_context():  # Dodanie kontekstu aplikacji
+            car = Car.query.get(car_id)
+            if car:
+                car.available = "true"
+                db.session.commit()
+                print(f"Car ID {car_id} is now available.")  # Logowanie dla potwierdzenia
+    timer = threading.Timer(delay, update_availability)
+    timer.start()
+
+
+@app.route("/getreservation", methods=["GET"])
+@jwt_required()
+def get_reservations():
+    try:
+        current_user_id = get_jwt_identity()["id"]
+        current_user = User.query.get(current_user_id)
+
+        print(f"Current User ID: {current_user_id}")
+        print(f"Current User: {current_user}")
+
+        if not current_user:
+            return jsonify({"error": "User not found"}), 404
+
+        if current_user.username == "admin":
+            reservations = Reservation.query.all()
+        else:
+            reservations = Reservation.query.filter_by(user_id=current_user_id).all()
+
+        print(f"Reservations: {reservations}")
+
+        reservations_data = [reservation.to_json_reservation() for reservation in reservations]
+        return jsonify({"reservations": reservations_data}), 200
+    except Exception as e:
+        print("Error in get_reservations:", str(e))
+        return jsonify({"error": "Internal Server Error"}), 500
+
+
+
+
 
 
 

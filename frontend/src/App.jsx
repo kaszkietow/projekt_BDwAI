@@ -8,6 +8,9 @@ import LoginPage from "./components/LoginPage.jsx";
 import RegisterPage from "./components/RegisterPage.jsx";
 import HomePage from "./components/HomePage.jsx";
 import CarsGrid from "./components/CarsGrid.jsx";
+import MyProfile from "./components/MyProfile.jsx";
+import Reservations from "./components/Reservations.jsx";
+import UsersList from "./components/UsersList.jsx";
 
 
 function App() {
@@ -21,7 +24,6 @@ function App() {
                             element={
 
                                     <HomePage />
-
                             }
                         />
                         <Route
@@ -45,6 +47,24 @@ function App() {
                             element={
 
                                     <CarsGrid />
+                            }
+                        />
+                        <Route
+                            path={"/myprofile"}
+                            element={
+                                <MyProfile />
+                            }
+                        />
+                        <Route
+                            path={"/reservations"}
+                            element={
+                                <Reservations/>
+                            }
+                        />
+                        <Route
+                            path={"/userslist"}
+                            element={
+                                <UsersList/>
                             }
                         />
                     </Routes>
