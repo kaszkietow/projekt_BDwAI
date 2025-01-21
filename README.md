@@ -1,4 +1,4 @@
-# ShareYourCar 🚀
+# ShareYourCar 🚜
 
 ### Jak uruchomić aplikację w Pycharm?
 
@@ -22,13 +22,13 @@ cd backend
 
 4. Zainstaluj wymagane repozytoria:
 
--   On macOS and Linux:
+-   Na macOS i Linux:
 
 ```bash
 pip3 install -r requirements.txt
 ```
 
--   On Windows:
+-   Na Windows:
 
 ```bash
 pip install -r requirements.txt
@@ -61,8 +61,10 @@ cd ../backend
 9. Uruchom aplikację Flask:
 
 ```bash
-flask run
+flask run --reload
 ```
 
-10. Otwórz przeglądarkę i wpisz `http://localhost:5000/` żeby zobaczyć aplikację.
+10. Otwórz przeglądarkę i wpisz `http://localhost:3000/` żeby zobaczyć aplikację.
+Backend działa na URL `http://Localhost:5000` warto skorzystać ze swaggera, który znajduje
+sie na URL `http://localhost:5000/swagger`
 
