@@ -5,7 +5,8 @@ import { useNavigate } from "react-router-dom";
 import {BASE_URL} from "./CarsGrid.jsx";
 import {toaster} from "./ui/toaster.jsx";
 
-const Reservations = ({currentUser}) => {
+const Reservations = () => {
+    const currentUser = location.state?.currentUser;
     const [reservations, setReservations] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -48,7 +49,6 @@ const Reservations = ({currentUser}) => {
 
         fetchReservations();
     }, [navigate]);
-    console.log("Received currentUser in MyProfile:", currentUser);
 
     return (
         <>
@@ -56,7 +56,7 @@ const Reservations = ({currentUser}) => {
             <Container my={4}>
                 <Heading size="xl" letterSpacing="tight">
                     <Highlight query="Reservations" styles={{ color: "teal.600" }}>
-                      {currentUser?.username === "admin" ? "All Reservations" : "Your Reservations"}
+                      All Reservations
                     </Highlight>
                 </Heading>
                 <Table.Root variant="simple">
