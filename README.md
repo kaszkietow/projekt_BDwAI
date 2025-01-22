@@ -20,7 +20,9 @@ cd ShareYourCar
 cd backend
 ```
 
-4. Zainstaluj wymagane repozytoria:
+4.Upewnij się, że masz venv w folderze backend jeśli nie to utwórz. 
+
+5. Zainstaluj wymagane repozytoria:
 
 -   Na macOS i Linux:
 
@@ -34,37 +36,37 @@ pip3 install -r requirements.txt
 pip install -r requirements.txt
 ```
 
-5. Przejdz do strony frontendu:
+6. Przejdz do strony frontendu:
 
 ```bash
 cd ../frontend
 ```
 
-6. Zainstaluj potrzebne repozytoria:
+7. Zainstaluj potrzebne repozytoria:
 
 ```bash
 npm install
 ```
 
-7. Zbuduj frontend aplikacji:
+8. Zbuduj frontend aplikacji:
 
 ```bash
 npm run build
 ```
 
-8. Przejdz do strony backendu:
+9. Przejdz do strony backendu:
 
 ```bash
 cd ../backend
 ```
 
-9. Uruchom aplikację Flask:
+10. Uruchom aplikację Flask:
 
 ```bash
 flask run --reload
 ```
 
-10. Otwórz przeglądarkę i wpisz `http://localhost:3000/` żeby zobaczyć aplikację.
+11. Otwórz przeglądarkę i wpisz `http://localhost:3000/` żeby zobaczyć aplikację.
 Backend działa na URL `http://Localhost:5000` warto skorzystać ze swaggera, który znajduje
 sie na URL `http://localhost:5000/swagger`
 
