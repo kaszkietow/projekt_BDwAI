@@ -20,7 +20,7 @@ cd ShareYourCar
 cd backend
 ```
 
-4.Upewnij się, że masz venv w folderze backend jeśli nie to utwórz. 
+4. Upewnij się, że masz venv w folderze backend jeśli nie to utwórz. 
 
 5. Zainstaluj wymagane repozytoria:
 
