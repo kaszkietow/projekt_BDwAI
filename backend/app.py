@@ -3,7 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from flask_swagger_ui import get_swaggerui_blueprint
 import os
-from flask_migrate import Migrate
+#from flask_migrate import Migrate
 
 
 app = Flask(__name__)

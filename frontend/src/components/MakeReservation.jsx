@@ -29,6 +29,10 @@ const MakeReservation = ({ car, currentUser }) => {
     const token = localStorage.getItem("token");
     const carData = { ...inputs };
 
+    let body = JSON.stringify(carData);
+
+    console.log("BODY JSON", body);
+
     try {
         const response = await fetch(BASE_URL + "/reservation", {
             method: "POST",
