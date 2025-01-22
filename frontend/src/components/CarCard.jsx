@@ -65,6 +65,7 @@ const CarCard = ({ car, user, setCars }) => {
   }
 
   const cardDisabled = (!isOwner && !isAdmin) && car.available === "false";
+
   return (
       <Card.Root
           shadow="2px -2px var(--shadow-color)"

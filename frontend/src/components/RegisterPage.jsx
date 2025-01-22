@@ -48,7 +48,7 @@ const RegisterPage = () => {
         const response = await fetch(BASE_URL + "/api/register", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ username, password, gender }), // Wysyłamy dane użytkownika
+            body: JSON.stringify({ username, password, gender }),
         });
 
         const data = await response.json();
@@ -70,7 +70,7 @@ const RegisterPage = () => {
             justifyContent="center"
             alignItems="center"
         >
-            <Card.Root width={{ base: "80vw", md: "70vw" }}> {/* Ustawienie szerokości na 50% widoku */}
+            <Card.Root width={{ base: "80vw", md: "70vw" }}>
                 <Card.Header>
                     <Text
                         textStyle={{ base: "2xl", md: "4xl" }}

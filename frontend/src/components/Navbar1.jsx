@@ -11,7 +11,7 @@ import {
 } from "@chakra-ui/react";
 import { IoMoon, IoSunny, IoCarSportSharp } from "react-icons/io5";
 import * as React from "react";
-import {jwtDecode} from "jwt-decode"; // Import jwt-decode
+import {jwtDecode} from "jwt-decode";
 import { useColorMode, useColorModeValue } from "./ui/color-mode.jsx";
 import AddCar from "./AddCar.jsx";
 import { Toaster } from "./ui/toaster.jsx";
@@ -33,7 +33,7 @@ const NavBar1 = ({setCars}) => {
   useEffect(() => {
 
     const handleCurrUser = async () => {
-      const token = localStorage.getItem("token"); // Pobierz token z localStorage
+      const token = localStorage.getItem("token");
       if (!token) {
         setError("User not logged in");
         setIsLoading(false);
@@ -44,7 +44,7 @@ const NavBar1 = ({setCars}) => {
         const res = await fetch(BASE_URL + "/current_user", {
           method: "GET",
           headers: {
-            Authorization: `Bearer ${token}`, // Dodaj token do nagłówka
+            Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
           },
         });
@@ -55,7 +55,7 @@ const NavBar1 = ({setCars}) => {
           throw new Error(data.error);
         }
 
-        setCurrentUser(data); // Ustaw dane aktualnie zalogowanego użytkownika
+        setCurrentUser(data);
       } catch (error) {
         console.error("Error fetching user data:", error.message);
         setError(error.message);

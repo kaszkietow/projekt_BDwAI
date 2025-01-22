@@ -18,7 +18,6 @@ const MyProfile = () => {
         return <div>No cars available for this user.</div>;
     }
 
-    // Renderowanie tabeli samochodów
     return (
         <Container maxW="container.xl">
             <Navbar1/>

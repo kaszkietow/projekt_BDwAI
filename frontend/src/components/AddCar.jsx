@@ -63,10 +63,8 @@ const AddCar = ( { setCars }) => {
     return;
   }
 
-  // Łączenie inputs i owner_id w jeden obiekt
   const carData = { ...inputs, owner_id, price };
 
-  // Dodanie logowania do konsoli, aby sprawdzić, co wysyłasz
   console.log('Sending car data to server:', carData);
 
   try {
@@ -76,7 +74,7 @@ const AddCar = ( { setCars }) => {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(carData),  // Wysyłanie połączonych danych
+      body: JSON.stringify(carData),
     });
 
     const data = await res.json();
